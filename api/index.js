@@ -1,5 +1,7 @@
 import express from 'express';
+import connectDB from './db/database.js';
 
+connectDB();
 const app = express();
 
 app.listen(3000, () => {

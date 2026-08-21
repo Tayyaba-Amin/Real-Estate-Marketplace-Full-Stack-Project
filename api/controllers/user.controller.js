@@ -1,3 +1,5 @@
-export const test = (req, res) => {
-    res.json({ message: "User route is working!" });
+
+
+export const test = async (req, res) => {
+    res.send("Hello World");
 }

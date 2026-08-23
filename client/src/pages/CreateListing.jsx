@@ -1,10 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
   const [imageUrls, setImageUrls] = useState([]);
   const [imageUploadError, setImageUploadError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [offer, setOffer] = useState(false);
+  const navigate = useNavigate();
 
   const handleImage = async () => {
     if (files.length === 0) {
@@ -55,31 +60,64 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const listingData = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      address: formData.get("address"),
-      type: formData.get("type"),
-      parking: formData.get("parking") === "on",
-      furnished: formData.get("furnished") === "on",
-      offer: formData.get("offer") === "on",
-      bedrooms: Number(formData.get("bedrooms")),
-      bathrooms: Number(formData.get("bathrooms")),
-      regularPrice: Number(formData.get("regularPrice")),
-      discountedPrice: Number(formData.get("discountedPrice")),
-      imageUrls,
-    };
-    const res = await fetch("/api/listing/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(listingData),
-    });
-    const data = await res.json();
-    console.log(data);
-    console.log(listingData);
+    if (imageUrls.length < 1) {
+      setError("You must upload at least one image");
+      return;
+    }
+
+    if (
+      offer &&
+      Number(formData.get("regularPrice")) <
+        Number(formData.get("discountedPrice"))
+    ) {
+      setError("Discounted price must be lower than regular price");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const listingData = {
+        name: formData.get("name"),
+        description: formData.get("description"),
+        address: formData.get("address"),
+        type: formData.get("type"),
+        parking: formData.get("parking") === "on",
+        furnished: formData.get("furnished") === "on",
+        offer: formData.get("offer") === "on",
+        bedrooms: Number(formData.get("bedrooms")),
+        bathrooms: Number(formData.get("bathrooms")),
+        regularPrice: Number(formData.get("regularPrice")),
+        discountedPrice: Number(formData.get("discountedPrice")),
+        imageUrls,
+      };
+
+      const res = await fetch("/api/listing/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(listingData),
+      });
+
+      const data = await res.json();
+
+      console.log(data);
+
+      if (data.success === false) {
+        setError(data.message);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(false);
+      navigate(`/listing/${data._id}`);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -133,6 +171,7 @@ export default function CreateListing() {
                 name="type"
                 id="rent"
                 className="w-5"
+                defaultChecked
               />
               <span>Rent</span>
             </div>
@@ -155,7 +194,14 @@ export default function CreateListing() {
               <span>Furnished</span>
             </div>
             <div className="flex gap-2">
-              <input name="offer" type="checkbox" id="offer" className="w-5" />
+              <input
+                name="offer"
+                type="checkbox"
+                id="offer"
+                className="w-5"
+                checked={offer}
+                onChange={(e) => setOffer(e.target.checked)}
+              />
               <span>Offer</span>
             </div>
           </div>
@@ -190,7 +236,7 @@ export default function CreateListing() {
                 className="p-3 border border-gray-300 rounded-lg"
                 type="number"
                 id="regularPrice"
-                min="1"
+                min="50"
                 required
               />
               <div className="flex flex-col items-center">
@@ -198,20 +244,22 @@ export default function CreateListing() {
                 <span className="text-xs">($ / month)</span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <input
-                name="discountedPrice"
-                className="p-3 border border-gray-300 rounded-lg"
-                type="number"
-                id="discountedPrice"
-                min="1"
-                required
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted Price</p>
-                <span className="text-xs">($ / month)</span>
+            {offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  name="discountedPrice"
+                  className="p-3 border border-gray-300 rounded-lg"
+                  type="number"
+                  id="discountedPrice"
+                  min="0"
+                  required
+                />
+                <div className="flex flex-col items-center">
+                  <p>Discounted Price</p>
+                  <span className="text-xs">($ / month)</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-4 flex-1">
@@ -282,11 +330,12 @@ export default function CreateListing() {
               </div>
             ))}
           <button
-            disabled={imageUrls.length === 0}
+            disabled={loading || uploading || imageUrls.length === 0}
             className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
           >
-            Create Listing
+            {loading ? "Creating..." : "Create Listing"}
           </button>
+          {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
     </main>

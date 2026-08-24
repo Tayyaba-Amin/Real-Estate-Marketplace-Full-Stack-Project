@@ -67,8 +67,8 @@ export default function CreateListing() {
 
     if (
       offer &&
-      Number(formData.get("regularPrice")) <
-        Number(formData.get("discountedPrice"))
+      Number(formData.get("discountedPrice")) >=
+        Number(formData.get("regularPrice"))
     ) {
       setError("Discounted price must be lower than regular price");
       return;
@@ -89,10 +89,10 @@ export default function CreateListing() {
         bedrooms: Number(formData.get("bedrooms")),
         bathrooms: Number(formData.get("bathrooms")),
         regularPrice: Number(formData.get("regularPrice")),
-        discountedPrice: Number(formData.get("discountedPrice")),
+        discountedPrice: offer ? Number(formData.get("discountedPrice")) : 0,
         imageUrls,
       };
-
+      console.log("LISTING DATA BEING SENT:", listingData);
       const res = await fetch("/api/listing/create", {
         method: "POST",
         headers: {

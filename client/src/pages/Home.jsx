@@ -50,23 +50,24 @@ export default function Home() {
   return (
     <div>
       {/*top*/}
-      <div className="flex flex-col gap-6 p-28 mex-w-6xl mx-auto">
-        <h1 className="text-slate-700 font-bold text-3xl lg:text-6xl">
-          Find you next <span className="text-slate-500">perfect</span>
-          <br />
-          space with ease
-        </h1>
-        <div className="text-gray-400 text-xs sm:text-sm">
-          PropertyHub is the best place to find your next perfect place to live.
-          <br />
-          We have a wide range of properties for you to choose from.
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 lg:px-12 py-12 sm:py-16 lg:py-24">
+        <div className="max-w-3xl">
+          <h1 className="text-slate-700 font-bold text-4xl sm:text-5xl lg:text-6xl leading-tight">
+            Find your next <span className="text-slate-500">perfect</span>
+            <br className="hidden sm:block" />
+            <span> space with ease</span>
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base leading-relaxed mt-5 max-w-2xl">
+            PropertyHub is the best place to find your next perfect place to
+            live. We have a wide range of properties for you to choose from.
+          </p>
+          <Link
+            to="/search"
+            className="inline-block mt-6 text-blue-800 font-semibold text-sm sm:text-base hover:underline"
+          >
+            Let's get started →
+          </Link>
         </div>
-        <Link
-          to="/search"
-          className="text-blue-800 font-bold text-xs sm:text-sm hover:underline"
-        >
-          Let's get started...
-        </Link>
       </div>
 
       {/*Swiper*/}

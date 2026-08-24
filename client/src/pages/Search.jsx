@@ -1,0 +1,71 @@
+export default function Search() {
+  return (
+    <div className="flex flex-col md:flex-row">
+      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen">
+        <form className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <label className="whitespace-nowrap font-semibold">
+              Search Term:
+            </label>
+            <input
+              type="text"
+              id="searchTerm"
+              placeholder="Search..."
+              className="border border-slate-300 bg-slate-50 p-3 text-slate-800 outline-none  rounded-lg "
+            />
+          </div>
+          <div className="flex flex-wrap gap-2 items-center">
+            <label className="font-semibold">Type:</label>
+            <div className="flex gap-2">
+              <input type="checkbox" id="all" className="w-5" />
+              <span>Rent & Sale</span>
+            </div>
+            <div className="flex gap-2">
+              <input type="checkbox" id="rent" className="w-5" />
+              <span>Rent</span>
+            </div>
+            <div className="flex gap-2">
+              <input type="checkbox" id="sale" className="w-5" />
+              <span>Sale</span>
+            </div>
+            <div className="flex gap-2">
+              <input type="checkbox" id="offer" className="w-5" />
+              <span>Offer</span>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 items-center">
+            <label className="font-semibold">Amenities:</label>
+            <div className="flex gap-2">
+              <input type="checkbox" id="parking" className="w-5" />
+              <span>Parking</span>
+            </div>
+            <div className="flex gap-2">
+              <input type="checkbox" id="furnished" className="w-5" />
+              <span>Furnished</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="font-semibold">Sort:</label>
+            <select
+              className="border border-slate-300 bg-slate-50 p-3 text-slate-800 outline-none  rounded-lg "
+              id="sort_order"
+            >
+              <option>Price high to low</option>
+              <option>Price low to high</option>
+              <option>Latest</option>
+              <option>Oldest</option>
+            </select>
+          </div>
+          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+            Search
+          </button>
+        </form>
+      </div>
+      <div className="">
+        <h1 className="text-3xl p-3 border-slate-300 text-slate-700 border-b text-center font-semibold mt-5">
+          Listing Results:
+        </h1>
+      </div>
+    </div>
+  );
+}

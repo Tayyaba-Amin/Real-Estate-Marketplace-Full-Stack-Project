@@ -97,8 +97,8 @@ export default function Listing() {
               <p className="text-2xl font-semibold">
                 {listing.name} - ${" "}
                 {listing.offer
-                  ? listing.discountPrice.toLocaleString("en-US")
-                  : listing.regularPrice.toLocaleString("en-US")}
+                  ? Number(listing.discountedPrice || 0).toLocaleString("en-US")
+                  : Number(listing.regularPrice || 0).toLocaleString("en-US")}
                 {listing.type === "rent" && " / month"}
               </p>
 
@@ -111,12 +111,13 @@ export default function Listing() {
                 <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                   {listing.type === "rent" ? "For Rent" : "For Sale"}
                 </p>
+
                 {listing.offer && (
                   <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
                     $
                     {(
-                      Number(listing.regularPrice) -
-                      Number(listing.discountPrice)
+                      Number(listing.regularPrice || 0) -
+                      Number(listing.discountedPrice || 0)
                     ).toLocaleString("en-US")}{" "}
                     OFF
                   </p>
@@ -131,6 +132,7 @@ export default function Listing() {
               <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
                 <li className="flex items-center gap-1 whitespace-nowrap">
                   <FaBed className="text-lg" />
+
                   {listing.bedrooms > 1
                     ? `${listing.bedrooms} beds`
                     : `${listing.bedrooms} bed`}
@@ -138,6 +140,7 @@ export default function Listing() {
 
                 <li className="flex items-center gap-1 whitespace-nowrap">
                   <FaBath className="text-lg" />
+
                   {listing.bathrooms > 1
                     ? `${listing.bathrooms} baths`
                     : `${listing.bathrooms} bath`}
@@ -145,11 +148,13 @@ export default function Listing() {
 
                 <li className="flex items-center gap-1 whitespace-nowrap">
                   <FaParking className="text-lg" />
+
                   {listing.parking ? "Parking spot" : "No Parking"}
                 </li>
 
                 <li className="flex items-center gap-1 whitespace-nowrap">
                   <FaChair className="text-lg" />
+
                   {listing.furnished ? "Furnished" : "Unfurnished"}
                 </li>
               </ul>

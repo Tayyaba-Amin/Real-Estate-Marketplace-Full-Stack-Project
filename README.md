@@ -1,6 +1,6 @@
 # Real Estate Marketplace Full Stack Project
 
-A full-stack real estate marketplace built with the MERN stack and a React frontend. The application allows users to browse property listings, search by filters, create and update listings, manage profiles, and sign in with email/password or Google-style auth flow.
+A full-stack real estate marketplace built with the MERN stack. The application allows users to browse property listings, search by filters, create and update listings, manage profiles, and sign in with email/password or Google-style auth flow.
 
 ## Features
 
@@ -151,10 +151,3 @@ Listings
 - The app uses Firebase configuration for client-side app setup and image storage integration.
 - Some pages are protected by a `PrivateRoute` wrapper to restrict access to logged-in users only.
 
-## License
-
-This project is licensed under the ISC License.
-
-## Author
-
-Built as a full-stack real estate marketplace project.
